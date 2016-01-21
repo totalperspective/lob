@@ -66,6 +66,7 @@
     (-reply msg id content opts)))
 
 (defrecord BasicMessage [id content content-type headers]
+  Message
   (-id [msg]
     id)
   (-source [msg])
