@@ -4,10 +4,11 @@
             [lob.message :as msg]))
 
 (defprotocol Link
+  (-id [link])
   (-open! [link])
   (-close! [link])
   (-closed? [link])
-  (-publication [link id] "Return a publication on the link"))
+  (-publication [link id opts] "Return a publication on the link"))
 
 (defprotocol Publication
   (-subscribe! [publication buffer-size callback] "Subscribe to a publication, returns a subscription"))
@@ -26,6 +27,10 @@ will block"))
 (defn link? [link]
   (satisfies? Link link))
 
+(defn id [link]
+  {:pre [(link? link)]}
+  (-id link))
+
 (defn open! [link]
   {:pre [(link? link)]}
   (-open! link))
@@ -37,6 +42,17 @@ will block"))
 (defn closed? [link]
   {:pre [(link? link)]}
   (-closed? link))
+
+(def ^:dynamic *default-pub-opts* {:multicast false
+                                   :persistent false
+                                   :durable false})
+
+(defn publication
+  ([link id]
+   (publication link id {}))
+  ([link id opts]
+   {:pre [(link? link)]}
+   (-publication link id (merge *default-pub-opts* opts))))
 
 (defn publication? [publication]
   (satisfies? Publication publication))

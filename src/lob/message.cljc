@@ -64,3 +64,23 @@
 (defn reply [msg id content opts]
   (when (replyable? msg)
     (-reply msg id content opts)))
+
+(defrecord BasicMessage [id content content-type headers]
+  (-id [msg]
+    id)
+  (-source [msg])
+  (-destination [msg])
+  (-content-type [msg]
+    content-type)
+  (-headers [msg]
+    headers)
+  (-content [msg]
+    content))
+
+(defn basic
+  ([id content]
+   (basic id content "text/plain"))
+  ([id content content-type]
+   (basic id content content-type {}))
+  ([id content content-type headers]
+   (->BasicMessage id content content-type headers)))
