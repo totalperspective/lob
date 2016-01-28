@@ -1,6 +1,5 @@
 (ns lob.link
-  (:require [cemerick.url :as url]
-            [medley.core :as m]
+  (:require [medley.core :as m]
             [lob.message :as msg]))
 
 (defprotocol Link
